@@ -1,33 +1,41 @@
 const db = require('../database/models/index');
 
 let controller = {
-    list: (req, res) => {
-        db.Movie.findAll()
+    list: async (req, res) => {
+        db.Movie.findAll({ raw: true})
             .then((movies) => {
             res.render('moviesList', {movies})
         })
+            .catch(error => (console.log(error)))
     },
-    new : (req, res) => {
+    new : async (req, res) => {
         db.Movie.findAll({
+            raw: true,
             order: [['release_date', 'DESC']],
             limit: 10
-        }).then(movies => {
+        })
+            .then(movies => {
             res.render('newestMovies', {movies})
         })
+            .catch(error => (console.log(error)))
     },
-    recomended: (req, res) => {
+    recomended: async (req, res) => {
         db.Movie.findAll({
+            raw: true,
             order: [['rating', 'DESC']],
             limit: 10
-        }).then(movies => {
+        })
+            .then(movies => {
             res.render('recommendedMovies', {movies})
         })
+            .catch(error => (console.log(error)))
     },
-    detail : (req, res) => {
-        db.Movie.findByPk(req.params.id)
+    detail : async (req, res) => {
+        db.Movie.findByPk(req.params.id, { raw: true})
         .then((movie) => {
             res.render('moviesDetail', {movie})
-    });
+    })
+        .catch(error => (console.log(error)))
     }
 }
 
