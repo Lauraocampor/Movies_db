@@ -2,18 +2,20 @@ const db = require('../database/models/index');
 
 let controller = {
     list: async (req, res) => {
-        db.Genre.findAll({ raw: true})
-            .then((genres) => {
+        try {
+            const genres = await db.Genre.findAll({ raw: true})
             res.render('genresList', {genres})
-        })
-            .catch(error => (console.log(error)))
+        } catch (error) {
+            res.render(error)
+        }
     },
     detail : async (req, res) => {
-        db.Genre.findByPk(req.params.id, { raw: true})
-        .then((genre) => {
-            res.render('genresDetail', {genre})
-    })
-        .catch(error => (console.log(error)))
+        try {
+            const genre = await db.Genre.findByPk(req.params.id, { raw: true})
+            res.render('genresDetail', {genre})          
+        } catch (error) {
+            res.render(error)
+        }
     }
 }
 
